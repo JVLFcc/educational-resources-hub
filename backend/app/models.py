@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, JSON
 from .db import Base
 
 class Resource(Base):
@@ -8,3 +8,5 @@ class Resource(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     resource_type = Column(String(50), nullable=False)
+    url = Column(String(255), nullable=False)
+    tags = Column(JSON, nullable=True)
