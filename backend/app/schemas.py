@@ -6,7 +6,7 @@ from enum import Enum
 class ResourceType(str, Enum):
     video = "Video"
     pdf = "PDF"
-    link = "link"
+    link = "Link"
 class ResourceBase(BaseModel):
     title: str
     description: Optional[str] = None

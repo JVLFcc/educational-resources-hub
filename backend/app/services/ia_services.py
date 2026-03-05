@@ -1,12 +1,12 @@
 import time
-import logging
+from app.core.logging import get_logger
 import os
 from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-logger = logging.getLogger(__name__) #* configurando o logger para usar o nome do módulo atual, útil para saber de onde as mensagens de log estão vindo
+logger = get_logger(__name__)  #* configurando o logger para usar o nome do módulo atual, útil para saber de onde as mensagens de log estão vindo
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY")) #! configurando a chave da API do Gemini a partir das variáveis de ambiente, garantindo que a chave não fique hardcoded no código
 
@@ -27,6 +27,8 @@ def generate_smart_description(title: str, resource_type: str):
         "- Ser escritas em minúsculo\n"
         "- Não conter espaços removidos (ex: 'matemática    básica')\n"
         "- Não usar hífens ou junções de palavras\n"
+        "- Ser o mais específicas possível, evitando termos genéricos (ex: 'ciências' é muito genérico, 'ciências biológicas' é melhor)\n"
+        "- Evitar repetições de tags para títulos semelhantes\n"
     )
     
     user_prompt = (
@@ -60,9 +62,10 @@ def generate_smart_description(title: str, resource_type: str):
     latency = round(time.time() - start_time, 2)
     
     logger.info(
-        f'[INFO] AI Requests: Title = "{title}", '
-        f'TokenUsage = {total_tokens}, '
-        f'Latency = {latency}s.'
+    f'AI Request | '
+    f'Title="{title}" | '
+    f'TokenUsage={total_tokens} | '
+    f'Latency={latency}s'
     )
     
     import json
